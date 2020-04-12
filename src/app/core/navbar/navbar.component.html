@@ -1,0 +1,67 @@
+<nav id="mainNavbar" class="navbar fixed-top navbar-light navbar-expand-md bg-primary justify-content-center justify-content-between text-white">
+
+  <button class="navbar-toggler ml-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleCollapsed()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <a class="navbar-brand d-none d-sm-inline d-md-none" href="#">{{ 'anms.title.short' | translate}}</a>
+
+  <span routerLink="" class="branding spacer center d-inline d-sm-none">
+    <img [src]="logo" /></span>
+  <span routerLink="" class="branding spacer center d-none d-sm-inline d-md-none">
+    <img [src]="logo" /> {{ 'anms.title.short' | translate }}</span>
+  <span routerLink="" class="branding spacer d-none d-md-inline"><img [src]="logo" />
+    {{ 'anms.title' | translate }}</span>
+
+
+  <div class="navbar-collapse collapse w-90" id="navbarSupportedContent" [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}">
+
+    <ul class="navbar-nav mx-auto justify-content-center">
+      <li class="navbar-menuitem color-branco-btn btn-outline-success mr-2" routerLinkActive="ativo" *ngFor="let item of navigation">
+        <a *ngIf="auth.temPermissao(item.permissao)" class="text-white" [routerLink]="[item.link]" (click)="toggleCollapsed()">
+          <span>{{item.label | translate}}</span> </a>
+      </li>
+    </ul>
+
+    <div class="navbar-custom-menu">
+
+      <ul class="nav navbar-nav flex-row flex-nowrap">
+        <li class="nav-item" *ngIf="exibindoMenu">
+          <a class="btn btn-outline-success my-2 my-sm-0 text-white" routerLink="/login">
+            {{ 'anms.menu.login' | translate }}
+          </a>
+        </li>
+
+        <!-- User Account: style can be found in dropdown.less -->
+        <li class="dropdown user user-menu" *ngIf="!exibindoMenu">
+
+          <div class="d-inline-block" ngbDropdown #myDrop="ngbDropdown">
+
+            <button class="btn color-branco-btn btn-outline-success mr-2" id="dropdownManual" ngbDropdownAnchor (focus)="myDrop.open()">
+              <span class="hidden-xs">
+                {{ 'anms.menu.ola' | translate }}! {{
+                auth.jwtPayload?.nome }}
+
+                <i class="fa fa-user-circle fa-lg"></i>
+              </span></button>
+
+            <div ngbDropdownMenu aria-labelledby="dropdownManual">
+              <button class="dropdown-item" (click)="$event.stopPropagation(); myDrop.close();">Perfil</button>
+              <a href="javascript:;" class=" dropdown-item " (click)="logout()">
+                <i class="fa fa-power-off fa-lg "></i>
+                {{ 'anms.menu.logout' | translate }}
+              </a>
+            </div>
+          </div>
+
+
+        </li>
+
+        <!-- User Account: style can be found in dropdown.less -->
+
+      </ul>
+    </div>
+
+  </div>
+</nav>

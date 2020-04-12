@@ -1,0 +1,203 @@
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
+
+
+<form autocomplete="off" (ngSubmit)="onSubmit()" [formGroup]="formulario">
+  <div class="container" style="margin-top: 85px;">
+    <div class="ui-g">
+      <div class="ui-g-12">
+        <p-panel>
+          <p-header>
+            <div class="ui-helper-clearfix">
+              <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">
+                {{ editando ? "Edição de" : "Novo" }} Usuário</span>
+
+              <div class="ui-toolbar-group-right ">
+                <button pButton type="button" label="Novo" icon="pi pi-plus" (click)="novo(formulario)" style="margin-right: .25em"></button>
+                <a pButton icon="fa fa-search" label="Pesquisar" routerLink="/usuarios"></a>
+              </div>
+            </div>
+          </p-header>
+
+          <div class="ui-g ">
+            <div class="ui-g-12">
+              <fieldset [ngClass]="{
+                  'ui-fieldset ui-widget ui-widget-content ui-corner-all': true
+                }">
+                <legend>Dados</legend>
+                <div>
+                  <div class="ui-fieldset-content ">
+                    <div class="ui-g-12 ui-md-6 ui-fluid" [ngClass]="aplicaCssErro('nome')">
+                      <label for="nome" [ngClass]="nome.invalid ? 'text-danger' : ''" class="control-label">Nome</label>
+                      <input pInputText type="text" name="nome" formControlName="nome" />
+                      <app-error-msg [control]="formulario.get('nome')" label="Nome"></app-error-msg>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid" [ngClass]="aplicaCssErro('sobreNome')">
+                      <label for="sobreNome" [ngClass]="sobreNome.invalid ? 'text-danger' : ''" class="control-label">Sobre
+                        Nome</label>
+                      <input pInputText type="text" name="sobreNome" formControlName="sobreNome" />
+                      <app-error-msg [control]="formulario.get('sobreNome')" label="Sobre Nome"></app-error-msg>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid" [ngClass]="aplicaCssErro('email')">
+                      <label for="email" [ngClass]="email.invalid ? 'text-danger' : ''" class="control-label">Email</label>
+                      <input type="email" class="form-control" [attr.disabled]="disabled ? '' : null" formControlName="email"
+                        id="email" placeholder="nome@email.com" />
+                      <app-error-msg [control]="formulario.get('email')" label="Email"></app-error-msg>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid" *ngIf="!editando" [ngClass]="aplicaCssErro('confirmaEmail')">
+                      <label for="confirmaEmail" [ngClass]="confirmaEmail.invalid ? 'text-danger' : ''" class="control-label">Confirma
+                        Email</label>
+                      <input type="confirmaEmail" class="form-control" formControlName="confirmaEmail" id="confirmaEmail"
+                        placeholder="nome@email.com" />
+                      <app-error-msg [control]="formulario.get('confirmaEmail')" label="Confirma Email"></app-error-msg>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid" *ngIf="!editando" [ngClass]="aplicaCssErro('senha')">
+                      <label for="senha" [ngClass]="senha.invalid ? 'text-danger' : ''" class="control-label">Senha</label>
+                      <input type="password" class="form-control" autocomplete="false" formControlName="senha" id="senha"
+                        placeholder="Senha" />
+                      <app-error-msg [control]="formulario.get('senha')" label="Senha"></app-error-msg>
+
+                      <label class="col" [ngClass]="
+                          senhaError.hasError('required') ||
+                          senhaError.hasError('hasNumber')
+                            ? 'text-danger'
+                            : 'text-success'
+                        ">
+                        <i [ngClass]="
+                            senhaError.hasError('required') ||
+                            senhaError.hasError('hasNumber')
+                              ? 'fa fa-times'
+                              : 'fa fa-check'
+                          "></i>
+                        A senha deve conter no mínimo 1 número!
+                      </label>
+                      <label class="col" [ngClass]="
+                          senhaError.hasError('required') ||
+                          senhaError.hasError('hasCapitalCase')
+                            ? 'text-danger'
+                            : 'text-success'
+                        ">
+                        <i [ngClass]="
+                            senhaError.hasError('required') ||
+                            senhaError.hasError('hasCapitalCase')
+                              ? 'fa fa-times'
+                              : 'fa fa-check'
+                          "></i>
+                        A senha deve conter no mínimo 1 Letra Maiúscula!
+                      </label>
+                      <label class="col" [ngClass]="
+                          senhaError.hasError('required') ||
+                          senhaError.hasError('hasSmallCase')
+                            ? 'text-danger'
+                            : 'text-success'
+                        ">
+                        <i [ngClass]="
+                            senhaError.hasError('required') ||
+                            senhaError.hasError('hasSmallCase')
+                              ? 'fa fa-times'
+                              : 'fa fa-check'
+                          "></i>
+                        A senha deve conter pelo menos uma letra minúscula!
+                      </label>
+                      <label class="col" [ngClass]="
+                          senhaError.hasError('required') ||
+                          senhaError.hasError('hasSpecialCharacters')
+                            ? 'text-danger'
+                            : 'text-success'
+                        ">
+                        <i [ngClass]="
+                            senhaError.hasError('required') ||
+                            senhaError.hasError('hasSpecialCharacters')
+                              ? 'fa fa-times'
+                              : 'fa fa-check'
+                          "></i>
+                        A senha deve conter no mínimo 1 caractere especial!
+                      </label>
+                      <label class="col" [ngClass]="
+                          senhaError.hasError('required') ||
+                          senhaError.hasError('minlength')
+                            ? 'text-danger'
+                            : 'text-success'
+                        ">
+                        <i [ngClass]="
+                            senhaError.hasError('required') ||
+                            senhaError.hasError('minlength')
+                              ? 'fa fa-times'
+                              : 'fa fa-check'
+                          "></i>
+                        Senha deve conter no mínimo 8 caracteres!
+                      </label>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid" *ngIf="!editando" [ngClass]="aplicaCssErro('confirmaSenha')">
+                      <label for="confirmaSenha" [ngClass]="confirmaSenha.invalid ? 'text-danger' : ''" class="control-label">Confirma
+                        Senha</label>
+                      <input type="password" class="form-control" autocomplete="false" formControlName="confirmaSenha"
+                        id="confirmaSenha" placeholder="Confirma Senha" />
+                      <app-error-msg [control]="formulario.get('confirmaSenha')" label="Confirma Senha"></app-error-msg>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4 ui-fluid">
+                      <label [ngClass]="dataNascimento.invalid ? 'text-danger' : ''">Data de nascimento</label>
+                      <p-calendar class="btn-block btn-flat" dateFormat="dd/mm/yy" [inline]="false" [readonlyInput]="false"
+                        name="dataNascimento" [showIcon]="true" formControlName="dataNascimento"></p-calendar>
+
+                      <app-error-msg [control]="formulario.get('dataNascimento')" label="Data de Nascimento"></app-error-msg>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="ui-g-12">
+
+              <fieldset [ngClass]="{
+                'ui-fieldset ui-widget ui-widget-content ui-corner-all': true
+              }">
+                <legend>Grupos de acessos</legend>
+                <div>
+                  <div class="ui-fieldset-content ">
+
+                    <div [ngClass]="aplicaCssErro('grupos')">
+                      <label for="grupos">Grupos</label>
+                      <div id="grupos" class="row">
+                        <div class="checkbox" class="col-sm-4" formArrayName="grupos" *ngFor="let item of listaGrupos.controls; let i = index">
+                          <label class="checkbox-inline">
+                            <input type="checkbox" class="custom-control-input" checked data-toggle="toggle"
+                              [formControlName]="i">
+
+                            <p-toggleButton onLabel="{{grupos[i].nome}}" [pTooltip]="grupoFormpTooltip(i) ? 'Remover' : 'Adicionar'"
+                              tooltipPosition="top" offLabel="{{grupos[i].nome}}" onIcon="fa fa-check" offIcon="fa fa-times"
+                              iconPos="right" [formControlName]="i">
+                            </p-toggleButton>
+
+                          </label>
+                        </div>
+
+                      </div>
+                      <app-error-msg [control]="formulario.get('grupos')" label="Grupos"></app-error-msg>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+            </div>
+          </div>
+
+          <p-footer>
+            <button pButton type="submit" label="Salvar" class="ui-button-success" icon="pi pi-check" [disabled]="campoFoiAlterado"></button>
+
+            <button pButton type="button" *ngIf="codigoBom" label="Cancelar Edição"
+            [disabled]="campoFoiAlterado" icon="fa fa-times" class="ui-button-danger" (click)="refazaConsulta()" style="margin-right: .25em"></button>
+
+          </p-footer>
+        </p-panel>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,104 @@
+<div class="container">
+
+  <div class="ui-g" style="margin-top: 85px;">
+    <div class="ui-g-12">
+
+      <p-panel>
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">
+              Lista de Pessoas</span>
+
+            <div class="ui-toolbar-group-right ">
+              <a pButton label="Nova pessoa" icon="pi pi-plus" routerLink="/pessoas/nova" style="margin-right: .25em"></a>
+            </div>
+          </div>
+        </p-header>
+
+        <div class="ui-g ">
+          <div class="ui-g-12">
+
+            <div class="ui-g">
+
+              <div class="ui-g-12 ui-fluid">
+
+                <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+
+                  <legend>Busca</legend>
+
+                  <form autocomplete="off" (ngSubmit)="pesquisar()">
+
+                    <div class="form-group has-feedback">
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Busca Pessoa ..." name="nome" [(ngModel)]="filtro.nome">
+                        <span class="input-group-btn">
+                          <button pButton class="btn btn-flat form-control" type="submit" icon="fa fa-search" label="Pesquisar"></button>
+                        </span>
+                      </div>
+                    </div>
+                  </form>
+
+                </fieldset>
+              </div>
+              <div class="ui-g-12 ui-fluid">
+
+                <p-table [columns]="cols" loadingIcon="fa-spinner" [value]="pessoas" [responsive]="true" [paginator]="true"
+                  [rows]="filtro.itensPorPagina" [lazy]="true" [totalRecords]="totalRegistros" (onLazyLoad)="aoMudarPagina($event)"
+                  #tabela>
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns" [ngClass]="[col.class]">
+                        {{col.header}}
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-pessoa let-rowIndex="rowIndex">
+                    <tr>
+                      <td class="col-data">
+                        <span class="ui-column-title">#</span>
+                        {{rowIndex + 1}}
+                      </td>
+                      <td>
+                        <span class="ui-column-title">Nome</span>
+                        {{ pessoa.nome }}</td>
+                      <td><span class="ui-column-title">Cidade</span>
+                        {{ pessoa.endereco.cidade?.nome }}</td>
+                      <td><span class="ui-column-title">Estado</span>
+                        {{ pessoa.endereco.cidade?.estado.nome }}</td>
+                      <td class="center">
+                        <a href="javascript:;" [style.color]="pessoa.ativo  ? 'green' : 'red'" [pTooltip]="pessoa.ativo ? 'Desativar' : 'Ativar'"
+                          tooltipPosition="top" (click)="alternarStatus(pessoa)">
+                          {{ pessoa.ativo ? 'Ativo' : 'Inativo' }}
+                        </a>
+                      </td>
+                      <td class="col-acoes">
+                        <a pButton icon="fa fa-pencil" class="ui-button-info" pTooltip="Editar" tooltipPosition="top"
+                          [routerLink]="['/pessoas', pessoa.codigo]"></a>
+
+                        <button pButton icon="fa fa-trash" class="ui-button-danger" pTooltip="Excluir" tooltipPosition="top"
+                          (click)="confirmarExclusao(pessoa)"></button>
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="5">
+                        Nenhuma pessoa encontrada
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </p-panel>
+
+    </div>
+  </div>
+
+</div>

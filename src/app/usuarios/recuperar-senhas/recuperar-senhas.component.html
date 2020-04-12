@@ -1,0 +1,180 @@
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
+
+
+<div class="login-box" *ngIf="!editando">
+  <div class="login-logo">
+    <h3>Recuperar senha</h3>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg"><a routerLink="/login">Voltar para Área de Login</a></p>
+
+    <form [formGroup]="frmSignupSolicitar" (submit)="submitSolicitar()">
+      <fieldset [ngClass]="{
+        'ui-fieldset ui-widget ui-widget-content ui-corner-all': true
+      }">
+              <legend>Dados</legend>
+      <div class="form-group">
+        <label for="email" [ngClass]="frmSignupSolicitar.controls['email'].invalid ? 'text-danger' : ''">Email</label>
+        <input id="email" formControlName="email" type="email" class="form-control" [ngClass]="frmSignupSolicitar.controls['email'].invalid ? 'is-invalid' : ''">
+
+        <app-error-msg [control]="email" label="Email"></app-error-msg>
+
+      </div>
+
+      <div class="form-group has-feedback">
+        <label for="dataNascimento" [ngClass]="frmSignupSolicitar.controls['dataNascimento'].invalid ? 'text-danger' : ''">Data
+          de Nascimento</label>
+
+        <p-calendar id="dataNascimento" class="btn-block btn-flat" formControlName="dataNascimento" placeholder="dd/mm/yyyy"
+          dateFormat="dd/mm/yy" [inline]="false" [readonlyInput]="false" [showIcon]="true"></p-calendar>
+
+        <app-error-msg [control]="dataNascimento" label="Data de Nascimento"></app-error-msg>
+
+      </div>
+</fieldset>
+<br>
+      <div class="form-group">
+        <button [disabled]="frmSignupSolicitar.invalid" type="submit" class="btn btn-primary btn-block btn-flat">Enviar</button>
+      </div>
+    </form>
+
+    <br />
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+
+<div class="login-box" *ngIf="editando">
+  <div class="login-logo">
+    <h4>Entre com a nova senha</h4>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+
+    <p class="login-box-msg"><a routerLink="/login">Voltar para Área de Login</a></p>
+
+    <form [formGroup]="frmSignup" autocomplete="off" (ngSubmit)="salvar()">
+
+      <fieldset [ngClass]="{
+  'ui-fieldset ui-widget ui-widget-content ui-corner-all': true
+}">
+        <legend>Dados da nova senha</legend>
+        <div class="form-group">
+          <label for="senha" [ngClass]="senhaError.invalid ? 'text-danger' : ''">Nova Senha:</label>
+          <input id="senha" placeholder="Senha" formControlName="senha" type="password" class="form-control" [ngClass]="senhaError.invalid ? 'is-invalid' : ''" />
+          <app-error-msg [control]="senha" label="Senha"></app-error-msg>
+
+        </div>
+        <div class="form-group">
+          <label for="confirmaSenha">Confirma Senha:</label>
+          <input id="confirmaSenha" placeholder="Confirma Senha" formControlName="confirmaSenha" type="password" class="form-control" [ngClass]="
+        confirmaSenhaError.invalid ? 'is-invalid' : ''
+          " />
+
+          <app-error-msg [control]="confirmaSenha" label="Confirma Senha"></app-error-msg>
+
+          <label class="text-danger" *ngIf="confirmaSenhaError.hasError('NoPassswordMatch')">
+            Senhas diferentes!
+          </label>
+        </div>
+      </fieldset>
+      <br>
+      <div class="form-group">
+        <button [disabled]="frmSignup.invalid" type="submit" class="btn btn-block font-weight-bold" [ngClass]="
+          confirmaSenhaError.invalid ? 'btn-primary' : 'btn-success'
+        "><i
+            [ngClass]="
+          senhaError.hasError('required') ||
+          senhaError.hasError('hasSmallCase')
+            ? ''
+            : 'fa fa-check'
+        "></i>
+          Salvar
+        </button>
+      </div>
+      <br>
+
+      <fieldset [ngClass]="{
+        'ui-fieldset ui-widget ui-widget-content ui-corner-all': true
+      }">
+        <legend>Orientações</legend>
+        <div class="form-group">
+          <label class="col" [ngClass]="
+            senhaError.hasError('required') || senhaError.hasError('hasNumber')
+              ? 'text-danger'
+              : 'text-success'
+          ">
+            <i [ngClass]="
+              senhaError.hasError('required') ||
+              senhaError.hasError('hasNumber')
+                ? 'fa fa-times-circle-o'
+                : 'fa fa-check-circle'
+            "></i>
+            A senha deve conter no mínimo 1 número!
+          </label>
+          <label class="col" [ngClass]="
+            senhaError.hasError('required') ||
+            senhaError.hasError('hasCapitalCase')
+              ? 'text-danger'
+              : 'text-success'
+          ">
+            <i [ngClass]="
+              senhaError.hasError('required') ||
+              senhaError.hasError('hasCapitalCase')
+                ? 'fa fa-times-circle-o'
+                : 'fa fa-check-circle'
+            "></i>
+            A senha deve conter no mínimo 1 Letra Maiúscula!
+          </label>
+          <label class="col" [ngClass]="
+            senhaError.hasError('required') ||
+            senhaError.hasError('hasSmallCase')
+              ? 'text-danger'
+              : 'text-success'
+          ">
+            <i [ngClass]="
+              senhaError.hasError('required') ||
+              senhaError.hasError('hasSmallCase')
+                ? 'fa fa-times-circle-o'
+                : 'fa fa-check-circle'
+            "></i>
+            A senha deve conter pelo menos uma letra minúscula!
+          </label>
+          <label class="col" [ngClass]="
+            senhaError.hasError('required') ||
+            senhaError.hasError('hasSpecialCharacters')
+              ? 'text-danger'
+              : 'text-success'
+          ">
+            <i [ngClass]="
+              senhaError.hasError('required') ||
+              senhaError.hasError('hasSpecialCharacters')
+                ? 'fa fa-times-circle-o'
+                : 'fa fa-check-circle'
+            "></i>
+            A senha deve conter no mínimo 1 caractere especial!
+          </label>
+          <label class="col" [ngClass]="
+            senhaError.hasError('required') || senhaError.hasError('minlength')
+              ? 'text-danger'
+              : 'text-success'
+          ">
+            <i [ngClass]="
+              senhaError.hasError('required') ||
+              senhaError.hasError('minlength')
+                ? 'fa fa-times-circle-o'
+                : 'fa fa-check-circle'
+            "></i>
+            Senha deve conter no mínimo 8 caracteres!
+          </label>
+        </div>
+      </fieldset>
+      <br>
+    </form>
+
+    <br />
+
+  </div>
+  <!-- /.login-box-body -->
+</div>

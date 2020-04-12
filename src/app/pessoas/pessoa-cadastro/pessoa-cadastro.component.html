@@ -1,0 +1,119 @@
+<div class="container">
+
+  <form class="form-horizontal" autocomplete="off" (ngSubmit)="onSubmit()" [formGroup]="formulario">
+
+    <div class="ui-g" style="margin-top: 85px;">
+      <div class="ui-g-12">
+
+        <p-panel>
+          <p-header>
+            <div class="ui-helper-clearfix">
+              <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">
+                {{ editando ? 'Edição de' : 'Nova' }} Pessoa</span>
+
+              <div class="ui-toolbar-group-right ">
+                <button pButton type="button" label="Nova pessoa" icon="pi pi-plus" (click)="nova(formulario)" style="margin-right: .25em"></button>
+                <a pButton icon="fa fa-search" label="Pesquisar" routerLink="/pessoas"></a>
+              </div>
+            </div>
+          </p-header>
+
+          <div class="ui-g ">
+            <div class="ui-g-12">
+
+              <div class="ui-g">
+
+                <div class="ui-g-12 ui-fluid">
+                  <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+
+                    <legend>Dados</legend>
+                    <app-input-field class="ui-g-12 ui-fluid" formControlName="nome" [classeCss]="aplicaCssErro('nome')"
+                      id="nome" label="Nome" [control]="formulario.get('nome')" placeholder="Nome"></app-input-field>
+
+                  </fieldset>
+                </div>
+
+                <div class="ui-g-12 ui-fluid">
+
+                  <fieldset formGroupName="endereco" [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+
+                    <legend>Endereço</legend>
+
+                    <div class="ui-g-12 ui-md-3 ui-fluid" [ngClass]="aplicaCssErro('endereco.cep')">
+                      <label for="cep" class="control-label">CEP</label>
+                      <input pInputText type="text" placeholder="Sem ponto(.) e traço (-)" class="form-control" id="cep"
+                        formControlName="cep">
+                      <app-error-msg [control]="formulario.get('endereco.cep')" label="CEP"></app-error-msg>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-9 ui-fluid" [ngClass]="aplicaCssErro('endereco.logradouro')">
+                      <label for="logradouro" class="control-label">Logradouro</label>
+                      <input pInputText type="text" class="form-control" id="logradouro" formControlName="logradouro">
+                      <app-error-msg [control]="formulario.get('endereco.logradouro')" label="Logradouro"></app-error-msg>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-3 ui-fluid" [ngClass]="aplicaCssErro('endereco.numero')">
+                      <label for="numero" class="control-label">Número</label>
+                      <input pInputText type="text" class="form-control" id="numero" formControlName="numero">
+
+                      <app-error-msg [control]="formulario.get('endereco.numero')" label="Número"></app-error-msg>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-5 ui-fluid">
+                      <label for="complemento" class="control-label">Complemento</label>
+                      <input pInputText type="text" class="form-control" id="complemento" formControlName="complemento">
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4 ui-fluid" [ngClass]="aplicaCssErro('endereco.bairro')">
+                      <label for="bairro" class="control-label">Bairro</label>
+                      <input pInputText type="text" class="form-control" id="bairro" formControlName="bairro">
+
+                      <app-error-msg [control]="formulario.get('endereco.bairro')" label="Bairro"></app-error-msg>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid" formGroupName="estado" [ngClass]="aplicaCssErro('endereco.estado')">
+
+                      <label for="estado" class="control-label">Estado</label>
+                      <p-dropdown placeholder="Selecione..." formControlName="codigo" [autoWidth]="false" [filter]="true"
+                        [options]="estados" name="estado" (onChange)="carregarCidades()" required></p-dropdown>
+                      <app-error-msg [control]="formulario.get('endereco.estado')" label="Estado"></app-error-msg>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid" formGroupName="cidade" [ngClass]="aplicaCssErro('endereco.cidade')">
+
+                      <label for="cidade" class="control-label">Cidade</label>
+
+                      <p-dropdown placeholder="Selecione..." [autoWidth]="false" [filter]="true"
+                      [options]="cidades"
+                        name="cidade" formControlName="codigo" required [disabled]="!formulario.get('endereco.estado').valid"></p-dropdown>
+                      <app-error-msg [control]="formulario.get('endereco.cidade')" label="Cidade"></app-error-msg>
+                    </div>
+
+                  </fieldset>
+                </div>
+
+                <div class="ui-g-12">
+                  <p-panel header="Contatos">
+                    <app-pessoa-cadastro-contato  [contatos]="pessoa.contatos"></app-pessoa-cadastro-contato>
+                  </p-panel>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <p-footer>
+            <button pButton type="submit" label="Salvar" class="ui-button-success" icon="pi pi-check"
+            [disabled]="formulario?.invalid"></button>
+          </p-footer>
+        </p-panel>
+
+      </div>
+    </div>
+
+  </form>
+</div>

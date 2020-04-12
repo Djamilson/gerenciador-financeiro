@@ -1,0 +1,9 @@
+<div class="form-group has-feedback" *ngIf="errorMessage != null">
+  <span class="sr-only">(error)</span>
+  <div class="alert alert-danger errorDiv" role="alert">
+      <span class="form-control-feedback color">
+          <i class="fa fa-times-circle-o"></i>
+        </span>
+    {{ errorMessage }}
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<p>
+  categoria-cadastro works!
+</p>
+
+<div class="container">
+
+  <form class="form-horizontal" autocomplete="off" (ngSubmit)="onSubmit()" [formGroup]="formulario">
+
+    <div class="ui-g" style="margin-top: 85px;">
+      <div class="ui-g-12">
+
+        <p-panel>
+          <p-header>
+            <div class="ui-helper-clearfix">
+              <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">
+                {{ editando ? 'Edição de' : 'Nova' }} Categoria</span>
+
+              <div class="ui-toolbar-group-right ">
+                <button pButton type="button" label="Nova categoria" icon="pi pi-plus" (click)="nova(formulario)" style="margin-right: .25em"></button>
+                <a pButton icon="fa fa-search" label="Pesquisar" routerLink="/categorias"></a>
+              </div>
+            </div>
+          </p-header>
+
+          <div class="ui-g ">
+            <div class="ui-g-12">
+              <div class="ui-g">
+
+                <div class="ui-g-12 ui-fluid">
+                  <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+
+                    <legend>Dados</legend>
+                    <app-input-field class="ui-g-12 ui-fluid" formControlName="nome" [classeCss]="aplicaCssErro('nome')"
+                      id="nome" label="Nome" [control]="formulario.get('nome')" placeholder="Nome"></app-input-field>
+
+                  </fieldset>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <p-footer>
+            <button pButton type="submit" label="Salvar" class="ui-button-success" icon="pi pi-check"
+            [disabled]="formulario?.invalid"></button>
+          </p-footer>
+        </p-panel>
+
+      </div>
+    </div>
+
+  </form>
+</div>

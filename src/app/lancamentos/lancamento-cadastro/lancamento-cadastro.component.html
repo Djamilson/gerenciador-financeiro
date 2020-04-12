@@ -1,0 +1,159 @@
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
+
+
+<div class="container">
+
+
+  <form autocomplete="off" (ngSubmit)="onSubmit()" [formGroup]="formulario">
+    <div class="ui-g" style="margin-top: 85px;">
+      <div class="ui-g-12">
+        <p-panel>
+          <p-header>
+            <div class="ui-helper-clearfix">
+              <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">
+                {{ editando ? 'Edição de' : 'Novo' }} Lançamento</span>
+
+              <div class="ui-toolbar-group-right ">
+                <button pButton type="button" label="Novo Lançamento" icon="pi pi-plus" (click)="novo()" style="margin-right: .25em"></button>
+                <a pButton icon="fa fa-search" label="Pesquisar" routerLink="/lancamentos"></a>
+              </div>
+            </div>
+          </p-header>
+
+          <div class="ui-g ">
+            <div class="ui-g-12">
+
+              <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+
+                <legend>Dados</legend>
+
+                <div class="ui-g-12 ui-fluid" *ngIf="editando">
+
+                  <fieldset [ngClass]="{'ui-fieldset content-section introduction ui-widget ui-widget-content ui-corner-all': true}">
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid">
+                      <label class="control-label">Data do {{ formulario.get('tipo').value === 'RECEITA' ? '
+                        Recebimento' :
+                        ' Pagamento' }}</label>
+                      <p-calendar dateFormat="dd/mm/yy" name="dataPagamento" [showIcon]="true" formControlName="dataPagamento"></p-calendar>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6 ui-fluid">
+                      <label class="control-label">Valor {{ formulario.get('tipo').value === 'RECEITA' ? 'Recebido' :
+                        'Pago' }}</label>
+
+                      <div class="ui-inputgroup">
+                        <span class="ui-inputgroup-addon">R$</span>
+                        <input pInputText type="text" name="valorPagoRecebido" placeholder="0,00" currencyMask
+                          [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: false }"
+                          formControlName="valorPagoRecebido">
+                      </div>
+
+                    </div>
+
+                  </fieldset>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-5 ui-fluid">
+
+                  <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+                    <legend>Tipo de Lançamento</legend>
+                    <p-selectButton name="tipo" [options]="tipos" formControlName="tipo"></p-selectButton>
+                  </fieldset>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-3 ui-fluid" *ngIf="!editando">
+
+                  <label class="control-label">Número de Lancamento</label>
+                  <p-dropdown name="numeroLancamento" [options]="listaRepeticaoLancamento" 
+                  [autoWidth]="false" formControlName="numeroLancamento"></p-dropdown>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-3 ui-fluid" *ngIf="editando">
+                 
+                  <label class="control-label">Número de Lancamento</label>
+                  <input pInputText disabled type="text" name="numeroLancamento" 
+                  formControlName="numeroLancamento">
+                </div>
+
+
+                <div class="ui-g-12 ui-md-4 ui-fluid">
+                  <label [ngClass]="dataVencimento.invalid ? 'text-danger' : ''">Vencimento</label>
+                  <p-calendar class="btn-block btn-flat" dateFormat="dd/mm/yy" [inline]="false" [readonlyInput]="false"
+                    name="dataVencimento" [showIcon]="true" formControlName="dataVencimento"></p-calendar>
+
+                  <app-error-msg [control]="formulario.get('dataVencimento')" label="Data de Vencimento"></app-error-msg>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-9 ui-fluid">
+                  <label class="control-label" [ngClass]="descricao.invalid ? 'text-danger' : ''">Descrição</label>
+                  <input pInputText type="text" name="descricao" formControlName="descricao">
+
+                  <app-error-msg [control]="formulario.get('descricao')" label="Descrição"></app-error-msg>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-3 ui-fluid">
+                  <label class="control-label" [ngClass]="valor.invalid ? 'text-danger' : ''">Valor à {{
+                    formulario.get('tipo').value === 'RECEITA' ? ' Receber' :
+                    'Pagar' }}</label>
+
+                  <div class="ui-inputgroup">
+                    <span class="ui-inputgroup-addon">R$</span>
+                    <input pInputText type="text" name="valor" placeholder="0,00" currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: false }"
+                      formControlName="valor">
+                  </div>
+                  <app-error-msg [control]="formulario.get('valor')" label="Valor à {{ formulario.get('tipo').value === 'RECEITA' ? ' Receber' :
+                  'Pagar' }}"></app-error-msg>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-6 ui-fluid" formGroupName="categoria">
+                  <label class="control-label" [ngClass]="categoria.invalid ? 'text-danger' : ''">Categoria</label>
+                  <p-dropdown name="categoria" class="btn-block btn-flat" [options]="categorias" placeholder="Selecione"
+                    [autoWidth]="false" formControlName="codigo"></p-dropdown>
+                  <app-error-msg [control]="formulario.get('categoria.codigo')" label="Categoria"></app-error-msg>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-6 ui-fluid" formGroupName="pessoa">
+                  <label class="control-label" [ngClass]="pessoa.invalid ? 'text-danger' : ''">Pessoa</label>
+                  <p-dropdown name="pessoa" class="btn-block btn-flat" [options]="pessoas" placeholder="Selecione"
+                    [autoWidth]="false" [filter]="true" formControlName="codigo"></p-dropdown>
+                  <app-error-msg [control]="formulario.get('pessoa.codigo')" label="Pessoa"></app-error-msg>
+
+                </div>
+
+                <div class="ui-g-12 ui-fluid">
+                  <label class="control-label">Observação</label>
+                  <textarea pInputTextarea rows="3" name="observacao" formControlName="observacao"></textarea>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+          <p-footer>
+
+            <button pButton type="submit" label="Salvar" class="ui-button-success" icon="pi pi-check" [disabled]="formulario.invalid"></button>
+
+            <button pButton type="button" *ngIf="editando" label="Cancelar Edição" icon="fa fa-times" class="ui-button-danger"
+              (click)="refazaConsulta()" style="margin-right: .25em"></button>
+
+
+          </p-footer>
+        </p-panel>
+
+      </div>
+    </div>
+  </form>
+
+
+
+
+  <div class="ui-g-12 ui-fluid" *ngIf="editando">
+    <app-data-table [codigoLancamento]="codigoLancamento"></app-data-table>
+  </div>

@@ -1,0 +1,85 @@
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
+
+<form autocomplete="off" (ngSubmit)="onSubmit()" [formGroup]="formulario">
+
+  <div class="container" style="margin-top: 85px;">
+    <div class="ui-g">
+      <div class="ui-g-12">
+        <p-panel>
+          <p-header>
+            <div class="ui-helper-clearfix">
+              <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">
+                Gerenciando as permissoes do Grupo</span>
+
+              <div class="ui-toolbar-group-right ">
+                 <a pButton icon="fa fa-search" label="Pesquisar" routerLink="/usuarios"></a>
+              </div>
+            </div>
+          </p-header>
+
+          <div class="ui-g-12 ">
+
+            <fieldset [ngClass]="{
+                'ui-fieldset ui-widget ui-widget-content ui-corner-all': true
+              }">
+              <legend>Grupos de acessos</legend>
+
+              <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label class="control-label">Grupo</label>
+                <p-dropdown name="codigo" [options]="grupos" (onChange)="carregarPermissoes()" placeholder="Selecione"
+                  [autoWidth]="false" [filter]="true" formControlName="codigo"></p-dropdown>
+              </div>
+
+            </fieldset>
+          </div>
+          <div class="ui-g-12" *ngIf="codigoGrupo">
+
+            <fieldset [ngClass]="{
+                'ui-fieldset ui-widget ui-widget-content ui-corner-all': true
+              }">
+              <legend>Permissoes de acessos</legend>
+              <div>
+                <div class="ui-fieldset-content ">
+
+                  <div class="ui-g-12" [ngClass]="aplicaCssErro('permissoes')">
+                    <label for="frameworks">Permissões</label>
+                    <div id="frameworks" class="row">
+                      <div  class="checkbox" class="ui-g-12 ui-md-4 ui-fluid" formArrayName="permissoes" *ngFor="let item of listaPermissoes.controls; let i = index">
+
+                        <label class="checkbox-inline" >
+                          <input type="checkbox" class="custom-control-input" checked data-toggle="toggle"
+                          [formControlName]="i">
+                          <p-toggleButton onLabel="{{retornDescricaoPermissao(i)}}" [pTooltip]="grupoFormpTooltip(i) ? 'Remover' : 'Adicionar'"
+                            tooltipPosition="top" offLabel="{{retornDescricaoPermissao(i)}}" onIcon="fa fa-check"
+                            offIcon="fa fa-times" iconPos="right" [formControlName]="i">
+                          </p-toggleButton>
+                        </label>
+                      </div>
+
+                    </div>
+                    <app-error-msg [control]="formulario.get('permissoes')" label="Permissão"></app-error-msg>
+                  </div>
+
+
+                </div>
+              </div>
+
+            </fieldset>
+
+          </div>
+
+          <p-footer>
+
+            <button pButton type="submit" label="Salvar" class="ui-button-success"
+            [disabled]="formulario.invalid" icon="pi pi-check" ></button>
+
+            <button pButton type="button"  label="Cancelar Edição" (click)="novo()"
+             icon="fa fa-times" class="ui-button-danger" style="margin-right: .25em"></button>
+
+          </p-footer>
+        </p-panel>
+      </div>
+    </div>
+  </div>
+
+</form>

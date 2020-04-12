@@ -1,0 +1,22 @@
+.col-valor {
+  width: 127px;
+  text-align: right;
+  font-size: 0.8em;
+}
+
+.col-data-header {
+  width: 110px;
+  text-align: center;
+  font-size: 0.8em;
+}
+
+.col-data-headerr {
+  width: 89px;
+  text-align: center;
+  font-size: 0.8em;
+}
+
+.col-header-id {
+  width: 150px;
+}
+

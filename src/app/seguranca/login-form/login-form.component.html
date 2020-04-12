@@ -1,0 +1,35 @@
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
+
+<div class="login-box">
+  <div class="login-logo">
+    <b>
+      {{ 'anms.menu.login' | translate }}</b>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Sign in to start your session</p>
+
+    <form autocomplete="off" #f="ngForm">
+      <div class="form-group has-feedback">
+        <input type="email" name="usuario" class="form-control" placeholder="E-mail" ngModel required #usuario>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" name="senha" placeholder="Senha" ngModel required #senha>
+      </div>
+      <!-- /.col -->
+      <div class="col-xs-4">
+        <button class="btn btn-primary btn-block btn-flat" type="submit" [disabled]="!f.valid" (click)="login(usuario.value, senha.value); senha.value = '';">{{'anms.menu.logout'
+          | translate }}</button>
+      </div>
+      <!-- /.col -->
+    </form>
+    <br>
+    <a href="javascript:;" pTooltip="Esqueceu a senha" tooltipPosition="top" (click)="prepararRecuperarSenha()">Esqueceu
+      a senha? Redefinição!</a>
+    <br>
+
+
+
+  </div>
+  <!-- /.login-box-body -->
+</div>

@@ -1,0 +1,5 @@
+<div class="form-group" [ngClass]="classeCss">
+  <label [attr.for]="id" class="control-label">{{ label }}</label>
+  <input pInputText [type]="type" class="form-control" [placeholder]="placeholder" [id]="id" [readonly]="!!isReadOnly"
+    [(ngModel)]="value">
+</div>

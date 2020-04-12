@@ -1,0 +1,92 @@
+<div class="container">
+
+  <div class="ui-g" style="margin-top: 85px;">
+    <div class="ui-g-12">
+
+      <p-panel>
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">
+              Lista de Categorias</span>
+
+            <div class="ui-toolbar-group-right ">
+              <a pButton label="Nova categoria" icon="pi pi-plus" routerLink="/categorias/nova" style="margin-right: .25em"></a>
+            </div>
+          </div>
+        </p-header>
+
+        <div class="ui-g ">
+          <div class="ui-g-12">
+
+            <div class="ui-g">
+
+              <div class="ui-g-12 ui-fluid">
+
+                <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+
+                  <legend>Busca</legend>
+
+                  <form autocomplete="off" (ngSubmit)="pesquisar()">
+
+                    <div class="form-group has-feedback">
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Busca Categoria ..." name="nome"
+                          [(ngModel)]="filtro.nome">
+                        <span class="input-group-btn">
+                          <button pButton class="btn btn-flat form-control" type="submit" icon="fa fa-search" label="Pesquisar"></button>
+                        </span>
+                      </div>
+                    </div>
+                  </form>
+
+                </fieldset>
+              </div>
+              <div class="ui-g-12 ui-fluid">
+
+                <p-table [columns]="cols" loadingIcon="fa-spinner" [value]="categorias" [responsive]="true" [paginator]="true"
+                  [rows]="filtro.itensPorPagina" [lazy]="true" [totalRecords]="totalRegistros" (onLazyLoad)="aoMudarPagina($event)"
+                  #tabela>
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns" [ngClass]="[col.class]">
+                        {{col.header}}
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-categoria let-rowIndex="rowIndex">
+                    <tr>
+                      <td class="col-data">
+                        <span class="ui-column-title">#</span>
+                        {{rowIndex + 1}}
+                      </td>
+                      <td>
+                        <span class="ui-column-title">Nome</span>
+                        {{ categoria.nome }}</td>
+                      <td class="col-acoes">
+                        <a pButton icon="fa fa-pencil" class="ui-button-info" pTooltip="Editar" tooltipPosition="top"
+                          [routerLink]="['/categorias', categoria.codigo]"></a>
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="5">
+                        Nenhuma categoria encontrada
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </p-panel>
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,59 @@
+<div class="card card-danger ">
+
+  <div class="card-header text-white bg-primary">Despesas da semana em aberto de {{
+    format(filtro.dataVencimentoInicio)}} à {{ format(filtro.dataVencimentoFim)}}</div>
+
+  <div class="card-body">
+
+    <p-table [columns]="cols" [value]="despesas" [responsive]="true" [paginator]="true" 
+    [rows]="filtro.itensPorPagina"  [rowsPerPageOptions]="[5,10,20]"
+      [lazy]="true" [totalRecords]="totalRegistros" (onLazyLoad)="aoMudarPagina($event)"
+       #tabelaReceita>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" [ngClass]="[col.class]">
+            {{col.header}}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-despesa>
+        <tr class="col-data-font">
+          <td><span class="ui-column-title">Pessoa</span>
+            {{ despesa.pessoa }}</td>
+          <td><span class="ui-column-title">Descrição</span>            
+            {{ despesa.descricao }}</td>
+          <td [ngClass]="getTestaData(despesa.dataVencimento)">
+            <span class="ui-column-title">Vencimento</span>
+            <span> {{ format(despesa.dataVencimento)}}</span></td>
+
+          <td class="col-text-center">
+            <span class="ui-column-title">Nº</span>
+            <span> {{despesa.numeroLancamento}}</span>
+          </td>
+
+          <td class="col-valor-dash-board" [style.color]="despesa.tipo === 'DESPESA' ? 'red' : 'blue'">
+              <span class="ui-column-title">Valor</span>            
+            {{ getFormattedPrice(despesa.valor)}}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">
+            Nenhuma despesa na semana
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+  </div>
+  <!-- /.card-body -->
+  <div class="card-footer text-muted">
+
+    <div class="ui-g-offset-8 ui-sm-12 ui-sm-offset-0 ui-fluid">
+      <label>Total <i class="fa fa-arrow-right" aria-hidden="true"></i></label>
+      <span> {{getFormattedPrice(totalDespesas)}}</span>
+    </div>
+  </div>
+</div>

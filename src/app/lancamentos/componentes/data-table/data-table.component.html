@@ -1,0 +1,78 @@
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
+
+<div class="panel-body">
+
+  <div class="panel panel-primary">
+
+    <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+      <legend>Anexar documento</legend>
+
+      <div class="panel-body">
+        <p-fileUpload 
+        allowTypes="application/*, image/*"
+        accept="application/*, image/*" mode="advanced" name="anexo" [url]="urlUploadAnexo" (onBeforeSend)="antesUploadAnexo($event)"
+          (onUpload)="aoTerminarUploadAnexo($event)" (onError)="erroUpload($event)" 
+          
+          chooseLabel="Anexar" cancelLabel="Cancelar" multiple="true" maxFileSize="100000000">
+        </p-fileUpload>
+        <p-progressSpinner [hidden]="!uploadEmAndamento" [style]="{ width: '25px', height: '25px' }"></p-progressSpinner>
+      </div>
+    </fieldset>
+    <br>
+
+    <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}" *ngIf="totalRegistro">
+      <legend>Documentos Anexos</legend>
+
+      <p-table [rowsPerPageOptions]="[5,10,15]" [columns]="cols" [value]="files" [responsive]="true" [paginator]="true"
+        [lazy]="true" #tabela>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" [ngClass]="[col.class]">
+              {{col.header}}
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-anexo let-rowIndex="rowIndex">
+          <tr>
+            <td class="col-data">
+              <span class="ui-column-title">#</span>
+              {{rowIndex + 1}}
+            </td>
+            <td>
+              <span class="ui-column-title">Nome</span>
+              {{ anexo.nome }}</td>
+
+            <td class="col-data">
+              <span class="ui-column-title">Data cadastro</span>
+              {{ format(anexo.dataCad)}}</td>
+            <td class="col-acoes">
+              <button pButton icon="fa fa-search" pTooltip="Visualizar" tooltipPosition="top" type="button" class="ui-button-raised"
+                (click)="prepararParaVisualizarAnexo(anexo)"></button>
+
+              <a pButton icon="fa fa-download" (click)="carregarAnexoParaDownload(anexo)" class="ui-button-success"
+                pTooltip="Download" tooltipPosition="top"></a>
+
+              <button pButton icon="fa fa-trash" class="ui-button-danger" pTooltip="Excluir" tooltipPosition="top"
+                (click)="confirmarExclusao(anexo.codigo)" [disabled]="!auth.temPermissao('ROLE_REMOVER_LANCAMENTO')"></button>
+
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6">
+              Nenhum anexo encontrado
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </fieldset>
+
+    <p-dialog [header]="anexo.nome" [(visible)]="exbindoAnexo" modal="modal">
+      <div class="text-center">
+        <img class="img-fluid rounded mx-auto d-block" src="{{urlAnexo}}" class="rounded" alt="..." style="max-width: 98%; height: auto;">
+      </div>
+
+    </p-dialog>

@@ -1,0 +1,158 @@
+<div class="container" style="margin-top: 85px;">
+
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <p-panel>
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">Pesquisa
+              de Lançamento</span>
+            <div class="ui-toolbar-group-right ">
+
+              <a pButton icon="fa fa-usd" label="Receitas" class="ui-button-success" pTooltip="Lista" tooltipPosition="top"
+                routerLink="/lancamentos/receitas"></a>
+
+              <a pButton icon="fa fa-money" label="Despesas" class="ui-button-danger" pTooltip="Lista" tooltipPosition="top"
+                routerLink="/lancamentos/despesas"></a>
+
+              <a pButton label="Novo Lançamento" icon="pi pi-plus" pTooltip="Novo" class="ui-button-primary"
+                tooltipPosition="top" routerLink="/lancamentos/novo"></a>
+
+            </div>
+          </div>
+        </p-header>
+
+        <div class="ui-g ">
+          <div class="ui-g-12">
+
+            <div class="ui-g">
+
+              <div class="ui-g-12 ui-fluid">
+
+                <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+
+                  <legend>Busca</legend>
+
+                  <form autocomplete="off" (ngSubmit)="pesquisar()">
+
+
+                    <div class="ui-g-12 ui-md-2 ui-fluid">
+                      <p-calendar name="vencimentoInicio" dateFormat="dd/mm/yy" placeholder="Data inicial" [inline]="false"
+                        [readonlyInput]="false" [showIcon]="true" [(ngModel)]="filtro.dataVencimentoInicio"></p-calendar>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-1 ui-fluid">
+                      <label for="complemento" class="control-label center">Até</label>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-2 ui-fluid">
+                      <p-calendar dateFormat="dd/mm/yy" [inline]="false" placeholder="Data fim" [readonlyInput]="false"
+                        [showIcon]="true" name="vencimentoFim" [(ngModel)]="filtro.dataVencimentoFim"></p-calendar>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-7 ui-fluid">
+                      <div class="form-group has-feedback">
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Busca Lançamento pela descrição..." name="nome"
+                            [(ngModel)]="filtro.descricao">
+                          <span class="input-group-btn">
+                            <button pButton class="btn btn-flat form-control" type="submit" icon="fa fa-search" label="Pesquisar"></button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </form>
+
+                </fieldset>
+              </div>
+              <div class="ui-g-12 ui-fluid">
+                <!--
+                <div class="ui-g-12 ui-md-6 ui-fluid" formGroupName="pessoa">
+                  <label class="control-label">Pessoa</label>
+                  <p-dropdown name="pessoa" [options]="quantidadePaginas" placeholder="Selecione" [autoWidth]="false" [filter]="true"
+                    formControlName="codigo"></p-dropdown>
+                </div> -->
+
+                <p-table [rowsPerPageOptions]="[5,10,15]" [columns]="cols" [value]="lancamentos" [responsive]="true"
+                  [paginator]="true" [rows]="filtro.itensPorPagina" [lazy]="true" [totalRecords]="totalRegistros"
+                  (onLazyLoad)="aoMudarPagina($event)" #tabela>
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of columns" [ngClass]="[col.class]">
+                        {{col.header}}
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-lancamento let-rowIndex="rowIndex">
+                    <tr>
+                      <td class="col-data">
+                        <span class="ui-column-title">#</span>
+                        {{rowIndex + 1}}
+                      </td>
+                      <td>
+                        <span class="ui-column-title">Nome</span>
+                        {{ lancamento.pessoa }}</td>
+                      <td>
+                        <span class="ui-column-title">Descrição</span>
+                        {{ lancamento.descricao }}</td>
+                      <td class="col-data">
+                        <span class="ui-column-title">Vencimento</span>
+                        {{ format(lancamento.dataVencimento)}}</td>
+                      <td class="col-data">
+                        <span class="ui-column-title">Pagamento</span>
+                        <span *ngIf="trataPagamento(lancamento.dataPagamento)">{{ format(lancamento.dataPagamento)}}
+                        </span>
+                        <span *ngIf="!trataPagamento(lancamento.dataPagamento)">
+                          <a pButton icon="fa fa-money" *ngIf="!testaTipo(lancamento.tipo)" class="ui-button-danger"
+                            pTooltip="Baixar" tooltipPosition="top" [routerLink]="['/lancamentos', lancamento.codigo]">
+                          </a>
+                          <a pButton icon="fa fa-usd" *ngIf="testaTipo(lancamento.tipo)" class="ui-button-success"
+                            pTooltip="Baixar" tooltipPosition="top" [routerLink]="['/lancamentos', lancamento.codigo]"></a>
+
+                        </span>
+                      </td>
+                      <td class="col-text-center">
+                        <span class="ui-column-title">Nº</span>
+                        <span> {{lancamento.numeroLancamento}}</span>
+                      </td>
+
+                      <td class="col-valor" [style.color]="testaTipo(lancamento.tipo) ? 'blue' : 'red'">
+                        <span class="ui-column-title">Valor</span>
+                        {{getFormattedPrice(lancamento.valor)}}
+                      </td>
+
+                      <td class="col-valor" [style.color]="testaTipo(lancamento.tipo) ? 'blue' : 'red'">
+                        <span class="ui-column-title">Valor</span>
+                        {{getFormattedPrice(lancamento.valorPagoRecebido)}}
+                      </td>
+                      <td class="col-acoes">
+                        <a pButton icon="fa fa-pencil" class="ui-button-info" pTooltip="Editar" tooltipPosition="top"
+                          [routerLink]="['/lancamentos', lancamento.codigo]"></a>
+
+                        <button pButton icon="fa fa-trash" class="ui-button-danger" pTooltip="Excluir" tooltipPosition="top"
+                          (click)="confirmarExclusao(lancamento)" [disabled]="!auth.temPermissao('ROLE_REMOVER_LANCAMENTO')"></button>
+
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="6">
+                        Nenhum lançamento encontrado
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+  </div>
+
+</div>

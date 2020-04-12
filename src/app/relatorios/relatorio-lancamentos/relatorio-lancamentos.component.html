@@ -1,0 +1,66 @@
+<div class="container" style="margin-top: 85px;">
+
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <p-panel>
+        <p-header>
+          <div class="ui-helper-clearfix">
+            <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px; align-content: center">Pesquisa
+              de Lançamento</span>
+            <div class="ui-toolbar-group-right ">
+              <a pButton label="Novo Lançamento" icon="pi pi-plus" class="ui-button-primary" style="margin-right: .25em"
+                routerLink="/lancamentos/novo"></a>
+            </div>
+          </div>
+        </p-header>
+
+        <div class="ui-g ">
+          <div class="ui-g-12">
+
+            <div class="ui-g">
+
+              <div class="ui-g-12 ui-fluid">
+
+                <fieldset [ngClass]="{'ui-fieldset ui-widget ui-widget-content ui-corner-all': true}">
+
+                  <legend>Relatório de lançamentos por pessoa</legend>
+
+                  <form #f="ngForm" (ngSubmit)="gerar()">
+
+                    <div class="ui-g-12 ui-md-2 ui-fluid">
+                      <p-calendar dateFormat="dd/mm/yy" placeholder="Vencimento" [inline]="false" required
+                        [readonlyInput]="false" [showIcon]="true" [(ngModel)]="periodoInicio" name="periodoInicio"></p-calendar>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-1 ui-fluid">
+                      <label for="complemento" class="control-label center">Até</label>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-2 ui-fluid">
+                      <p-calendar dateFormat="dd/mm/yy" [inline]="false" required placeholder="Data fim"
+                        [readonlyInput]="false" [showIcon]="true" [(ngModel)]="periodoFim" name="periodoFim"></p-calendar>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-7 ui-fluid">
+                      <div class="form-group has-feedback">
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <button pButton type="submit" class="btn btn-flat form-control" icon="fa fa-print" label="Gerar" [disabled]="f.invalid"></button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </form>
+
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+  </div>
+
+</div>
+

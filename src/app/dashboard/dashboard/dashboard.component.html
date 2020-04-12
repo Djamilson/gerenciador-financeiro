@@ -1,0 +1,105 @@
+<div class="container" style="margin-top: 85px;">
+
+  <div class="ui-g">
+    <div class="ui-g-12">
+
+      <div class="row">
+        <div class="ui-g-12 ui-md-6 ui-lg-3 ui-fluid">
+              <!-- small box -->
+          <div class="small-box bg-warning text-white">
+            <div class="inner">
+              <h3>Hoje</h3>
+
+              <p>{{ dataHoje | date:'dd/MM/yyyy' }}</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-calendar"></i>
+            </div>
+            <h6 class="small-box-footer">Mês Atual <i class="fa fa-arrow-circle-right"></i></h6>
+          </div>
+        </div>
+
+        <div class="ui-g-12 ui-md-6 ui-lg-3 ui-fluid">
+            <!-- small box -->
+          <div class="small-box bg-info text-white">
+            <div class="inner">
+              <h3><sup style="font-size: 20px">R$</sup> {{lancamentoTotal.totalReceitasMes | number:'1.2-2'}}</h3>
+
+              <p>Total</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-dollar"></i>
+            </div>
+            <h6 class="small-box-footer">Receitas <i class="fa fa-arrow-circle-up"></i></h6>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="ui-g-12 ui-md-6 ui-lg-3 ui-fluid">
+            <!-- small box -->
+          <div class="small-box bg-danger text-white">
+            <div class="inner">
+              <h3><sup style="font-size: 20px">R$</sup> {{lancamentoTotal.totalDespesasMes | number:'1.2-2'}} </h3>
+              <p>Total</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-comments-o"></i> </div>
+            <h6 class="small-box-footer">Despesas <i class="fa fa-arrow-circle-up"></i></h6>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="ui-g-12 ui-md-6 ui-lg-3 ui-fluid">
+            <!-- small box -->
+          <div class="small-box  text-white" [ngClass]="condition ? 'bg-success' : 'bg-danger'">
+            <div class="inner">
+              <h3><sup style="font-size: 20px">R$</sup> {{lancamentoTotal.totalReceitasDespesasMes | number:'1.2-2'}}</h3>
+              <p>Saldo</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-thumbs-o-up" *ngIf="condition"></i>
+              <i class="fa fa-thumbs-o-down" *ngIf="!condition"></i>
+            </div>
+            <h6 class="small-box-footer">Em caixa <i class="fa fa-arrow-circle-up"></i></h6>
+          </div>
+        </div>
+        <!-- ./col -->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+
+  <div class="ui-g">
+
+    <div class="ui-g-12 ui-md-6 ui-fluid">
+      <app-relatorio-receita-semana></app-relatorio-receita-semana>
+    </div>
+
+    <div class="ui-g-12 ui-md-6 ui-fluid">
+      <app-relatorio-despesa-semana></app-relatorio-despesa-semana>
+    </div>
+
+  </div>
+
+
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <h3>Gráficos</h3>
+    </div>
+
+    <div class="ui-g-12 ui-md-6">
+      <p-panel header="Lançamentos por categoria">
+        <p-chart type="pie" [data]="pieChartData" [options]="options"></p-chart>
+      </p-panel>
+    </div>
+
+    <div class="ui-g-12 ui-md-6">
+      <p-panel header="Lançamentos por dia">
+        <p-chart type="line" [data]="lineChartData" [options]="options"></p-chart>
+      </p-panel>
+    </div>
+
+  </div>
+</div>
